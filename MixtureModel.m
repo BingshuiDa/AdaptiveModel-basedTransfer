@@ -32,7 +32,6 @@ classdef MixtureModel % Works reliably for 2(+) Dimensional distributions
         else
             mmodel.alpha = modifalpha/pusum;
         end
-        mmodel.alpha
     end
     function solutions = sample(mmodel,nos)
       indsamples = ceil(nos*mmodel.alpha);
@@ -43,7 +42,7 @@ classdef MixtureModel % Works reliably for 2(+) Dimensional distributions
               continue;
           else
               sols = ProbabilityModel.sample(mmodel.model_list{i},indsamples(i));
-              solutions = [solutions;sols];
+              solutions = [solutions; sols];
           end
       end
       solutions = solutions(randperm(totalsamples),:);

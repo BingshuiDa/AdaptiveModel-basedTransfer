@@ -50,7 +50,7 @@ classdef ProbabilityModel % Works reliably for 2(+) Dimensional distributions
         model.mean_true = mean(solutions);
         covariance = cov(solutions);
         model.covarmat_true = diag(diag(covariance)); % Simplifying to univariate distribution by ignoring off diagonal terms of covariance matrix
-        solutions_noisy = [solutions;rand(0.2*pop,model.vars)];
+        solutions_noisy = [solutions;rand(round(0.1*pop),model.vars)];
         model.mean_noisy = mean(solutions_noisy);
         covariance = cov(solutions_noisy);
         model.covarmat_noisy = diag(diag(covariance));% Simplifying to univariate distribution by ignoring off diagonal terms of covariance matrix

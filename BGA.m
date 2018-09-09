@@ -1,18 +1,29 @@
-function model = BGA(problem,dims,th_best) % Simple Binary GA, with uniform crossover and bit-flip mutation
-% Function returns a probability distribution model encapsulating the structure of the
-% favorable regions of the search space.
-    load allmodels_TS % allmodels should be initialized as an empty cell array where source probability distributions are gradually stored
-%     load allmodels_CBR
+function [bestSol, fitness_hist] = BGA(problem, dims, th_best) 
+%[bestSol, fitness_hist] = BGA(problem,dims,th_best): simple binary GA with
+%uniform crossover and bit-flip mutation. 
+%INPUT:
+% problem: problem type, 'onemax', 'onemin', or 'trap5'
+% dims: problem dimensionality
+% th_best: global best fitness value (used for early stop to build
+% probabilistic models)
+%
+%OUTPUT:
+% bestSol: best solution
+% fitness: history of best fitness for each generation
+    
+    load('./allmodels.mat'); % allmodels should be initialized as an empty cell array where source probability distributions are gradually stored
 
     pop = 200;
     gen = 1000;
     
+    fitness_hist = zeros(gen, 1);
     population = round(rand(pop,dims));    
     fitness = funceval(population,problem,dims);
     buildmodel = true;
-    bestfitness = max(fitness);
+    fitness_hist(1) = max(fitness);
+    disp(['Generation 1 best fitness = ',num2str(fitness_hist(1))]);
     
-    for i = 1:gen
+    for i = 2:gen
         parent1 = population(randperm(pop),:);
         parent2 = population(randperm(pop),:);
         tmp = rand(pop,dims);        
@@ -31,24 +42,21 @@ function model = BGA(problem,dims,th_best) % Simple Binary GA, with uniform cros
         fitness = interfitness(1:pop);
         interpop = interpop(index,:);        
         population = interpop(1:pop,:);
-        disp(['Best fitness = ',num2str(fitness(1))]);
-%         if bestfitness ~= fitness(1)
-%             allmodels_CBR = [allmodels_CBR; population(1,:)];
-%         end
-        bestfitness = fitness(1);
+        fitness_hist(i) = fitness(1);
+        disp(['Generation ', num2str(i), ' best fitness = ',num2str(fitness_hist(i))]); 
+ 
         if (fitness(1) >= th_best || i == gen) && buildmodel
+            disp('Building probablistic model...')
             model = ProbabilityModel('umd');
-%             noise = round(rand(0.1*pop,dims));
             model = ProbabilityModel.buildmodel(model,population);
-            allmodels_TS{length(allmodels_TS)+1} = model;
-            save('allmodels_TS.mat','allmodels_TS')
-            buildmodel = false;
-            
-%             allmodels_CBR = [allmodels_CBR; population(1,:)];
+            allmodels{length(allmodels)+1} = model;
+            save('allmodels.mat','allmodels')
+            disp('Complete!')
+            fitness_hist(i+1:end) = fitness(1);
+            bestSol = population(1, :);
             break;
         end
     end
-%     save('allmodels_CBR.mat', 'allmodels_CBR');
 end
 
 function fitness = funceval(population,problem,dims)
@@ -74,28 +82,7 @@ function fitness = funceval(population,problem,dims)
             end
             fitness(i) = fitsum;
         end
-    elseif strcmp(problem,'trap2')
-        pop = size(population, 1);
-        fitness = zeros(pop,1);
-        index = 1:dims;
-        index = vec2mat(index,2);
-        rows = size(index,1);
-        for i = 1:pop
-            fitsum = 0;
-            for j = 1:rows
-                contri = sum(population(i,index(j,:)));
-                if contri == 2
-                    fitsum = fitsum+2;
-                else
-                    fitsum = fitsum+(1-contri);
-                end
-            end
-            fitness(i) = fitsum;
-        end
-    elseif strcmp(problem,'hamming')
-        load 'hamming_optimal.mat'
-        optimal = optimal(1:dims);
-        pop = size(population, 1);
-        fitness = dims - sum(abs(population - repmat(optimal, pop, 1)), 2);
+    else
+        error('Function not implemented.')
     end
 end
