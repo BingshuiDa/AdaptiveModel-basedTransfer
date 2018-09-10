@@ -10,8 +10,8 @@ In `MOO\`, we have included examples for AMT-enabled NSGA-II.
 ## Citation
 > ```
 > @ARTICLE{da18tcyb,
-> 	author    = {B. Da and A. Gupta and Y. S. Ong},
-> 	journal={IEEE Transactions on Cybernetics}, 
+>	author    = {B. Da and A. Gupta and Y. S. Ong},
+>	journal={IEEE Transactions on Cybernetics}, 
 >	title={Curbing Negative Influences Online for Seamless Transfer Evolutionary Optimization}, 
 >	year={2018}, 
 >	volume={}, 
