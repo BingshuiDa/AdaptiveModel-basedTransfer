@@ -1,5 +1,3 @@
-%% Model preparation
-% clear 
 clc
 
 global maxdim;
@@ -9,7 +7,7 @@ alpha = {};
 result_NSGA = {};
 maxdim = 30;
 trans.TrInt = 10;
-reps = 1;
+reps = 30;
 
 for prob = 1:length(f_functions)
     f_source = f_functions;

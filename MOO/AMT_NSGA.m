@@ -1,4 +1,4 @@
-function [bestSol, IGD_hist, alpha]= AMT_NSGA(f,no_of_objs,L,U,pop,trans)
+function [IGD_hist, alpha, bestSol]= AMT_NSGA(f,no_of_objs,L,U,pop,trans)
 %[IGD_hist, alpha]= AMT_NSGA(f,no_of_objs,L,U,pop,transfer,TrInt): Adaptive
 %Model-based Transfer NSGA_II with SBX crossover and polynomial mutation.
 %INPUT:
@@ -39,15 +39,7 @@ end
 
 IGD_hist = zeros(gen, 1);
 alpha = [];
-if ischar(f)
-    if no_of_objs == 2
-        data = load([f, '.pf']);
-    elseif no_of_objs == 3
-        data = load([f, '.3D.pf']);
-    end
-else
-    data = load([f.name, '.pf']);
-end
+pf = load([f, '.pf']);  % stored pareto front
 
 for i =1:pop
     population(i)=Chromosome;
@@ -129,22 +121,22 @@ for generation=2:gen
     obj_data = vec2mat([population.objectives],no_of_objs);           
     IGD = 0;
     if no_of_objs == 2
-        for i = 1:size(data,1)
-            c1 = data(i,1)*ones(pop,1);
-            c2 = data(i,2)*ones(pop,1);
+        for i = 1:size(pf,1)
+            c1 = pf(i,1)*ones(pop,1);
+            c2 = pf(i,2)*ones(pop,1);
             IGD = IGD + sqrt(min(sum((obj_data-[c1 c2]).^2,2)));
         end
     elseif no_of_objs == 3
-        for i = 1:size(data,1)
-            c1 = data(i,1)*ones(pop,1);
-            c2 = data(i,2)*ones(pop,1);
-            c3 = data(i,3)*ones(pop,1);
+        for i = 1:size(pf,1)
+            c1 = pf(i,1)*ones(pop,1);
+            c2 = pf(i,2)*ones(pop,1);
+            c3 = pf(i,3)*ones(pop,1);
             IGD = IGD + sqrt(min(sum((obj_data-[c1 c2 c3]).^2,2)));
         end
     else
         error('Too many objectives.');
     end
-    IGD_hist(generation)=IGD/size(data,1);  
+    IGD_hist(generation)=IGD/size(pf,1);  
     disp(['Generation ', num2str(generation), ' IGD score: ', num2str(IGD_hist(generation))]);
 end 
 if nargout == 3

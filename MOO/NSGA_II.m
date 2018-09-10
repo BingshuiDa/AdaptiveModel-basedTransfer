@@ -1,14 +1,12 @@
 function [IGD_hist, bestSol]= NSGA_II(f,no_of_objs,L,U,pop)
-%[IGD_hist, alpha]= AMT_NSGA(f,no_of_objs,L,U,pop,transfer,TrInt): Adaptive
-%Model-based Transfer NSGA_II with SBX crossover and polynomial mutation.
+%[IGD_hist, alpha]= NSGA_II(f,no_of_objs,L,U,pop,transfer,TrInt): 
+%NSGA_II with SBX crossover and polynomial mutation.
 %INPUT:
 % f: function to be optimized
 % no_of_objs: number of objectives
 % L: lower bound of box constraint
 % U: upper bound of box constraint
 % pop: population size
-% trans:    trans.transfer: binary variable 
-%           trans.TrInt: transfer interval for AMT
 %
 %OUTPUT:
 % IGD_hist: history of IGD fitness for each generation
@@ -38,7 +36,6 @@ for i=1:pop
 end 
 [population,frontnumbers]=SolutionComparison.nondominatedsort(population,pop,no_of_objs);
 [population,minimums]=SolutionComparison.diversity(population,frontnumbers,pop,no_of_objs);
-%         [population,minimums]=SolutionComparison.extremumbiasing(population,frontnumbers,pop,no_of_objs);
 for generation=1:gen
     for i = 1:pop
         parent(i)=Chromosome();
