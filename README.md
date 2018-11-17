@@ -7,6 +7,8 @@ The `demo.m` file implements a toy example in the paper, in which the source tas
 
 In `MOO\`, we have included examples for AMT-enabled NSGA-II.
 
+In `Knapsack\`, we have included examples for Knapsack problems.
+
 ## Citation
 > ```
 > @ARTICLE{da18tcyb,

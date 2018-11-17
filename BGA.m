@@ -11,8 +11,10 @@ function [bestSol, fitness_hist] = BGA(problem, dims, th_best)
 % bestSol: best solution
 % fitness: history of best fitness for each generation
     
-    load('./allmodels.mat'); % allmodels should be initialized as an empty cell array where source probability distributions are gradually stored
-
+    % allmodels should be initialized as an empty cell array where 
+    % source probability distributions are gradually stored
+    load('./allmodels.mat');
+    
     pop = 200;
     gen = 1000;
     
