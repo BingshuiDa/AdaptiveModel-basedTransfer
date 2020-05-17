@@ -24,3 +24,6 @@ In `Knapsack\`, we have included examples for Knapsack problems.
 >	month={},
 > }
 > ```
+
+## Update
+Added Python implementation in `./AMETEA_python`.

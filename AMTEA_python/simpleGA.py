@@ -261,7 +261,7 @@ def main():
     parser.add_argument('--TrInt', type=int, default=10)
     args = parser.parse_args()
 
-    # bestSol, _ = simpleGA(args.sLen, args.buildmodel)
+    bestSol, _ = simpleGA(args.sLen, args.buildmodel)
     trans = {'transfer': args.transfer, 'TrInt': args.TrInt}
     bestSol, _ = transferGA(args.sLen, trans, args.buildmodel)
     with open('bestParameter.pkl', 'wb') as f:
